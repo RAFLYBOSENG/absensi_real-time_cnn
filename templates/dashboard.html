@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <style>
+        body { background: #f8f9fa; }
+        .sidebar {
+            min-height: 100vh;
+            background: #343a40;
+            color: #fff;
+        }
+        .sidebar a {
+            color: #fff;
+            text-decoration: none;
+            display: block;
+            padding: 12px 20px;
+        }
+        .sidebar a.active, .sidebar a:hover {
+            background: #495057;
+        }
+        .content {
+            padding: 32px;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2 d-none d-md-block sidebar">
+            <div class="position-sticky">
+                <h4 class="mt-4 mb-4 text-center">Admin Panel</h4>
+                <a href="{{ url_for('admin_dashboard') }}" class="active" id="menu-dashboard">Dashboard</a>
+                <a href="{{ url_for('admin_users') }}" id="menu-users">Mahasiswa</a>
+                <a href="{{ url_for('admin_attendance') }}" id="menu-absensi">Absensi</a>
+                <a href="{{ url_for('admin_faces') }}" id="menu-faces">Wajah</a>
+                <a href="{{ url_for('admin_model') }}" id="menu-model">Model</a>
+                <a href="{{ url_for('admin_export') }}" id="menu-export">Export</a>
+                <a href="{{ url_for('register') }}" id="menu-faces">Daftar Mahasiswa</a>
+                <a href="{{ url_for('logout') }}" class="mt-4">Logout</a>
+            </div>
+        </nav>
+        <main class="col-md-10 ms-sm-auto col-lg-10 px-md-4 content" id="main-content">
+            {% if menu == 'dashboard' %}
+                <h2>Selamat Datang di Dashboard Admin</h2>
+                <p>Pilih menu di sebelah kiri untuk mengelola sistem absensi wajah.</p>
+            {% elif menu == 'users' %}
+                <h2>Daftar Mahasiswa</h2>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>NIM</th>
+                            <th>Prodi</th>
+                            <th>Semester</th>
+                            <th>Universitas</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for u in users %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ u['nama'] }}</td>
+                            <td>{{ u['nim'] }}</td>
+                            <td>{{ u['prodi'] }}</td>
+                            <td>{{ u['semester'] }}</td>
+                            <td>{{ u['universitas'] }}</td>
+                            <td>
+                                <a href="{{ url_for('admin_user_detail', user_id=u['id']) }}" class="btn btn-sm btn-info">Detail</a>
+                                <a href="#" class="btn btn-sm btn-warning disabled">Edit</a>
+                                <form action="{{ url_for('admin_user_delete', user_id=u['id']) }}" method="post" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus mahasiswa ini?');">
+                                    <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% elif menu == 'user_detail' %}
+                <h2>Detail Mahasiswa</h2>
+                <table class="table table-bordered w-50">
+                    <tr><th>Nama</th><td>{{ user['nama'] }}</td></tr>
+                    <tr><th>NIM</th><td>{{ user['nim'] }}</td></tr>
+                    <tr><th>Prodi</th><td>{{ user['prodi'] }}</td></tr>
+                    <tr><th>Semester</th><td>{{ user['semester'] }}</td></tr>
+                    <tr><th>Universitas</th><td>{{ user['universitas'] }}</td></tr>
+                </table>
+                <a href="{{ url_for('admin_users') }}" class="btn btn-secondary">Kembali</a>
+            {% elif menu == 'attendance' %}
+                <h2>Rekap Absensi</h2>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>NIM</th>
+                            <th>Prodi</th>
+                            <th>Tanggal</th>
+                            <th>Jam</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in records %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ r['nama'] }}</td>
+                            <td>{{ r['nim'] }}</td>
+                            <td>{{ r['prodi'] }}</td>
+                            <td>{{ r['timestamp'].split(' ')[0] }}</td>
+                            <td>{{ r['timestamp'].split(' ')[1] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% elif menu == 'faces' %}
+                <h2>Manajemen Wajah Mahasiswa</h2>
+                <form action="{{ url_for('admin_faces') }}" method="post" enctype="multipart/form-data" class="mb-4 row g-2 align-items-end">
+                    <div class="col-auto">
+                        <label for="user_id" class="form-label">Pilih Mahasiswa</label>
+                        <select name="user_id" id="user_id" class="form-select" required>
+                            <option value="">-- Pilih --</option>
+                            {% for u in users %}
+                                <option value="{{ u['id'] }}">{{ u['nama'] }} ({{ u['nim'] }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <label for="photo" class="form-label">Upload Foto Wajah</label>
+                        <input type="file" name="photo" id="photo" class="form-control" accept="image/*" required>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </div>
+                </form>
+                <div class="row">
+                    {% for item in faces_data %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <b>{{ item.user['nama'] }}</b> ({{ item.user['nim'] }})
+                            </div>
+                            <div class="card-body">
+                                {% if item.images %}
+                                    <div class="d-flex flex-wrap gap-2">
+                                        {% for img in item.images %}
+                                            <div class="text-center">
+                                                <img src="/dataset/{{ item.user['nama'] }}/{{ img }}" alt="{{ img }}" width="80" class="img-thumbnail mb-1">
+                                                <form action="#" method="post" style="display:inline;">
+                                                    <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                                                </form>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <span class="text-muted">Belum ada foto wajah.</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <!-- Konten dinamis akan diisi oleh route Flask sesuai menu -->
+        </main>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

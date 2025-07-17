@@ -1,0 +1,7 @@
+flask
+opencv-python
+face-recognition
+numpy
+pandas
+Pillow
+dill

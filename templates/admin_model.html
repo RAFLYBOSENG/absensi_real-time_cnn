@@ -1,0 +1,11 @@
+{% extends 'admin_base.html' %}
+{% block title %}Monitoring Model{% endblock %}
+{% block content %}
+<h2>Status Model Pengenalan Wajah</h2>
+<table class="table w-50">
+    <tr><th>Jumlah Kelas (Mahasiswa)</th><td>{{ num_classes }}</td></tr>
+    <tr><th>Jumlah Data Foto</th><td>{{ total_images }}</td></tr>
+    <tr><th>Waktu Terakhir Retrain</th><td>{{ last_retrain }}</td></tr>
+</table>
+<button class="btn btn-primary" disabled>Retrain Model (Coming Soon)</button>
+{% endblock %} 

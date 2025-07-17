@@ -1,0 +1,56 @@
+{% extends 'admin_base.html' %}
+{% block title %}Manajemen Wajah Mahasiswa{% endblock %}
+{% block content %}
+<h2>Manajemen Wajah Mahasiswa</h2>
+<form action="{{ url_for('admin_faces') }}" method="post" enctype="multipart/form-data" class="mb-4 row g-2 align-items-end">
+    <div class="col-auto">
+        <label for="user_id" class="form-label">Pilih Mahasiswa</label>
+        <select name="user_id" id="user_id" class="form-select" required>
+            <option value="">-- Pilih --</option>
+            {% for u in users %}
+                <option value="{{ u['id'] }}">{{ u['nama'] }} ({{ u['nim'] }})</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-auto">
+        <label for="photo" class="form-label">Upload Foto Wajah</label>
+        <input type="file" name="photo" id="photo" class="form-control" accept="image/*" required>
+    </div>
+    <div class="col-auto">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="is_profile" id="is_profile">
+            <label class="form-check-label" for="is_profile">Jadikan foto profil</label>
+        </div>
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </div>
+</form>
+<div class="row">
+    {% for item in faces_data %}
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <b>{{ item.user['nama'] }}</b> ({{ item.user['nim'] }})
+            </div>
+            <div class="card-body">
+                {% if item.images %}
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for img in item.images %}
+                            <div class="text-center">
+                                <img src="{{ url_for('static', filename='uploads/' ~ item.user['nama'] ~ '/' ~ img) }}" alt="{{ img }}" width="120" class="img-thumbnail mb-1">
+                                <form action="#" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                                </form>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <span class="text-muted">Belum ada foto wajah.</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %} 

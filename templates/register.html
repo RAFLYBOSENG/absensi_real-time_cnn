@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registrasi Mahasiswa</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white text-center">
+          <h4>Form Registrasi Mahasiswa</h4>
+        </div>
+        <div class="card-body">
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert alert-info">{{ message }}</div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+          <form method="POST" enctype="multipart/form-data" id="formRegis">
+            <div class="mb-3">
+              <label>Nama Lengkap</label>
+              <input type="text" name="nama" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label>NIM</label>
+              <input type="text" name="nim" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label>Program Studi</label>
+              <input type="text" name="prodi" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label>Semester</label>
+              <input type="text" name="semester" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label>Upload Foto Wajah (min. 3 foto: depan, kiri, kanan)</label>
+              <input type="file" name="foto" class="form-control" accept="image/*" multiple>
+              <div class="mt-2">Atau ambil foto langsung:</div>
+              <button type="button" class="btn btn-info mb-2" id="btnAmbilFoto">Ambil Foto Kamera</button>
+              <div id="cameraArea" class="mb-2" style="display:none;">
+                <video id="video" width="320" height="240" autoplay></video>
+                <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+                <div class="mt-2">
+                  <button type="button" class="btn btn-primary" id="btnCapture">Capture</button>
+                  <span id="captureInfo" class="ms-2"></span>
+                </div>
+              </div>
+              <div class="row mt-2" id="previewFoto">
+                <div class="col"><img id="imgPreview1" src="" width="100" style="display:none;"></div>
+                <div class="col"><img id="imgPreview2" src="" width="100" style="display:none;"></div>
+                <div class="col"><img id="imgPreview3" src="" width="100" style="display:none;"></div>
+              </div>
+              <input type="hidden" name="foto_cam1" id="foto_cam1">
+              <input type="hidden" name="foto_cam2" id="foto_cam2">
+              <input type="hidden" name="foto_cam3" id="foto_cam3">
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Daftar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+let fotoStep = 0;
+let fotoData = [null, null, null];
+const btnAmbilFoto = document.getElementById('btnAmbilFoto');
+const cameraArea = document.getElementById('cameraArea');
+const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+const btnCapture = document.getElementById('btnCapture');
+const captureInfo = document.getElementById('captureInfo');
+const preview1 = document.getElementById('imgPreview1');
+const preview2 = document.getElementById('imgPreview2');
+const preview3 = document.getElementById('imgPreview3');
+const input1 = document.getElementById('foto_cam1');
+const input2 = document.getElementById('foto_cam2');
+const input3 = document.getElementById('foto_cam3');
+
+btnAmbilFoto.onclick = function() {
+    cameraArea.style.display = 'block';
+    fotoStep = 0;
+    fotoData = [null, null, null];
+    preview1.style.display = 'none';
+    preview2.style.display = 'none';
+    preview3.style.display = 'none';
+    captureInfo.innerText = 'Ambil foto tampak depan';
+    navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+        video.srcObject = stream;
+    });
+};
+
+btnCapture.onclick = function() {
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+    const dataUrl = canvas.toDataURL('image/jpeg');
+    if (fotoStep === 0) {
+        preview1.src = dataUrl; preview1.style.display = 'block'; input1.value = dataUrl;
+        captureInfo.innerText = 'Ambil foto tampak kanan';
+    } else if (fotoStep === 1) {
+        preview2.src = dataUrl; preview2.style.display = 'block'; input2.value = dataUrl;
+        captureInfo.innerText = 'Ambil foto tampak kiri';
+    } else if (fotoStep === 2) {
+        preview3.src = dataUrl; preview3.style.display = 'block'; input3.value = dataUrl;
+        captureInfo.innerText = 'Selesai!';
+        // Stop kamera
+        video.srcObject.getTracks().forEach(track => track.stop());
+        cameraArea.style.display = 'none';
+    }
+    fotoStep++;
+};
+</script>
+</body>
+</html> 

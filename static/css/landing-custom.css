@@ -1,0 +1,161 @@
+body {
+  font-family: 'Nunito', Arial, sans-serif;
+  background: #f8f9fa;
+  margin: 0;
+  padding: 0;
+}
+
+/* Navbar transparan dan teks putih */
+#mainNav {
+  background: transparent !important;
+  box-shadow: none !important;
+  transition: background 0.3s;
+}
+#mainNav .navbar-brand, #mainNav .nav-link {
+  color: #fff !important;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+#mainNav .nav-link.active, #mainNav .nav-link:hover {
+  color: #64a19d !important;
+}
+
+/* Hero Section */
+.hero-section {
+  min-height: 100vh;
+  width: 100%;
+  background: url('../assets/img/bg-masthead.jpg') center center/cover no-repeat;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.7);
+  z-index: 1;
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+.hero-title {
+  font-size: 4.5rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: #fff;
+  text-shadow: 0 4px 24px rgba(0,0,0,0.7);
+  text-transform: uppercase;
+}
+.hero-subtitle {
+  color: #e0e0e0;
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+.hero-section .btn-primary {
+  background: #64a19d;
+  border: none;
+  font-size: 1.2rem;
+  padding: 0.8rem 2.5rem;
+  border-radius: 30px;
+  transition: background 0.2s;
+}
+.hero-section .btn-primary:hover {
+  background: #50817e;
+}
+
+/* About Section */
+.about-section {
+  background: linear-gradient(135deg, #64a19d 0%, #b2f0e6 100%);
+  color: #fff;
+}
+.about-section .fw-bold {
+  color: #fff;
+}
+.about-section .fa-2x {
+  color: #fff;
+  transition: transform 0.2s;
+}
+.about-section .bg-white.bg-opacity-25 {
+  background: rgba(255,255,255,0.18) !important;
+  transition: box-shadow 0.2s;
+}
+.about-section .bg-white.bg-opacity-25:hover .fa-2x {
+  transform: scale(1.15);
+}
+.about-section img {
+  max-width: 100%;
+  border-radius: 1rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+}
+@media (max-width: 992px) {
+  .about-section .row.align-items-center {
+    flex-direction: column-reverse;
+  }
+  .about-section img {
+    margin-bottom: 2rem;
+  }
+}
+
+/* Projects Section */
+.projects-section {
+    padding: 5rem 0;
+}
+.projects-section .project-text {
+    padding: 2rem;
+}
+.projects-section .bg-black {
+    background: #212529 !important;
+    border-radius: 1rem;
+}
+
+/* Signup Section */
+.signup-section {
+    background: #64a19d;
+    padding: 5rem 0;
+}
+.signup-section h2, .signup-section .form-control {
+    color: #fff;
+}
+.signup-section .btn-primary {
+    background: #212529;
+    border: none;
+}
+.signup-section .btn-primary:hover {
+    background: #343a40;
+}
+
+/* Contact Section */
+.contact-section {
+    padding: 5rem 0;
+}
+.contact-section .card {
+    border-radius: 1rem;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+}
+
+/* Footer */
+.footer {
+    background: #212529;
+    color: #fff;
+    padding: 1.5rem 0;
+    font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+  .hero-section .btn-primary {
+    font-size: 1rem;
+    padding: 0.7rem 1.5rem;
+  }
+  .about-section, .projects-section, .signup-section, .contact-section {
+        padding: 2.5rem 0;
+    }
+}

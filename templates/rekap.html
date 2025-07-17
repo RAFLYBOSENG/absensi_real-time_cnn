@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rekap Kehadiran</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+<div class="d-flex">
+  <nav class="sidebar bg-primary text-white fade-in smooth-transition">
+    <h4 class="p-3">Asenii</h4>
+    <ul class="nav flex-column">
+      <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Dashboard</a></li>
+      <li class="nav-item"><a class="nav-link" href="{{ url_for('attendance') }}">Absensi</a></li>
+      <li class="nav-item"><a class="nav-link active" href="{{ url_for('rekap') }}">Rekap Kehadiran</a></li>
+      <li class="nav-item"><a class="nav-link" href="{{ url_for('profile') }}">Profil</a></li>
+      <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Logout</a></li>
+    </ul>
+  </nav>
+  <main class="flex-fill p-4">
+    <h2 class="fade-in">Rekap Kehadiran</h2>
+    <table class="table table-bordered mt-3 slide-up smooth-transition">
+      <thead class="table-light">
+        <tr>
+          <th>Tanggal & Waktu</th>
+          <th>Nama</th>
+          <th>NIM</th>
+          <th>Program Studi</th>
+          <th>Semester</th>
+          <th>Universitas</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for record in records %}
+        <tr>
+          <td>{{ record['timestamp'] }}</td>
+          <td>{{ record['nama'] }}</td>
+          <td>{{ record['nim'] }}</td>
+          <td>{{ record['prodi'] }}</td>
+          <td>{{ record['semester'] }}</td>
+          <td>{{ record['universitas'] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+</div>
+</body>
+</html>
