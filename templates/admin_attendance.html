@@ -1,29 +1,33 @@
 {% extends 'admin_base.html' %}
 {% block title %}Rekap Absensi{% endblock %}
 {% block content %}
-<h2>Rekap Absensi</h2>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>No</th>
-            <th>Nama</th>
-            <th>NIM</th>
-            <th>Prodi</th>
-            <th>Tanggal</th>
-            <th>Jam</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for r in records %}
-        <tr>
-            <td>{{ loop.index }}</td>
-            <td>{{ r['nama'] }}</td>
-            <td>{{ r['nim'] }}</td>
-            <td>{{ r['prodi'] }}</td>
-            <td>{{ r['timestamp'].split(' ')[0] }}</td>
-            <td>{{ r['timestamp'].split(' ')[1] }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="admin-card mb-4">
+    <div class="admin-card-title mb-2">Rekap Absensi</div>
+    <div class="table-responsive">
+        <table class="table admin-table">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>NIM</th>
+                    <th>Prodi</th>
+                    <th>Tanggal</th>
+                    <th>Jam</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in records %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ r['nama'] }}</td>
+                    <td>{{ r['nim'] }}</td>
+                    <td>{{ r['prodi'] }}</td>
+                    <td>{{ r['timestamp'].split(' ')[0] }}</td>
+                    <td>{{ r['timestamp'].split(' ')[1] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %} 

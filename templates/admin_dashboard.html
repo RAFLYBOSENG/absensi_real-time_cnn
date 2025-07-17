@@ -1,72 +1,113 @@
 {% extends 'admin_base.html' %}
 {% block title %}Dashboard Admin{% endblock %}
 {% block content %}
-<h2 class="mb-4">Selamat Datang di Dashboard Admin</h2>
-<p class="mb-4">Gunakan menu di sebelah kiri untuk mengelola data mahasiswa, absensi, wajah, dan model pengenalan wajah. Berikut ringkasan data sistem:</p>
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card text-bg-primary mb-3">
-            <div class="card-body">
-                <h5 class="card-title">Total Mahasiswa</h5>
-                <p class="card-text display-6">{{ total_mahasiswa }}</p>
-            </div>
+<div class="row g-4 mb-4">
+    <div class="col-md-2">
+        <div class="admin-card">
+            <div class="admin-card-title">Total Mahasiswa</div>
+            <div class="admin-card-value">{{ total_mahasiswa }}</div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card text-bg-success mb-3">
-            <div class="card-body">
-                <h5 class="card-title">Total Absensi</h5>
-                <p class="card-text display-6">{{ total_absensi }}</p>
-            </div>
+    <div class="col-md-2">
+        <div class="admin-card">
+            <div class="admin-card-title">Total Absensi</div>
+            <div class="admin-card-value">{{ total_absensi }}</div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card text-bg-info mb-3">
-            <div class="card-body">
-                <h5 class="card-title">Total Foto Wajah</h5>
-                <p class="card-text display-6">{{ total_foto }}</p>
-            </div>
+    <div class="col-md-2">
+        <div class="admin-card">
+            <div class="admin-card-title">Total Sakit</div>
+            <div class="admin-card-value">{{ total_sakit }}</div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card text-bg-warning mb-3">
-            <div class="card-body">
-                <h5 class="card-title">Status Model</h5>
-                <p class="card-text">Kelas: {{ num_classes }}<br>Retrain: {{ last_retrain }}</p>
-            </div>
+    <div class="col-md-2">
+        <div class="admin-card">
+            <div class="admin-card-title">Total Tidak Hadir</div>
+            <div class="admin-card-value">{{ total_alfa }}</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="admin-card">
+            <div class="admin-card-title">Total Foto Wajah</div>
+            <div class="admin-card-value">{{ total_foto }}</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="admin-card">
+            <div class="admin-card-title">Status Model</div>
+            <div class="admin-card-value">Kelas: {{ num_classes }}</div>
+            <div class="text-muted" style="font-size:0.9rem;">Retrain: {{ last_retrain }}</div>
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-8">
-        <h4 class="mt-5">Grafik Aktivitas Absensi 10 Hari Terakhir</h4>
-        <canvas id="absensiChart" height="120"></canvas>
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="admin-card">
+            <div class="admin-card-title mb-2">Grafik Hadir 10 Hari Terakhir</div>
+            <canvas id="grafikHadir" height="200"></canvas>
+        </div>
     </div>
-    <div class="col-md-4 d-flex flex-column align-items-end justify-content-start mt-5">
-        <a href="{{ url_for('admin_users') }}" class="btn btn-success mb-2">+ Tambah Mahasiswa</a>
-        <a href="{{ url_for('admin_model') }}" class="btn btn-warning mb-2">Retrain Model</a>
+    <div class="col-lg-4">
+        <div class="admin-card">
+            <div class="admin-card-title mb-2">Grafik Sakit 10 Hari Terakhir</div>
+            <canvas id="grafikSakit" height="200"></canvas>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="admin-card">
+            <div class="admin-card-title mb-2">Grafik Tidak Hadir 10 Hari Terakhir</div>
+            <canvas id="grafikAlfa" height="200"></canvas>
+        </div>
+    </div>
+    <div class="col-12 d-flex flex-column align-items-end justify-content-start">
+        <a href="{{ url_for('admin_users') }}" class="btn btn-success mb-2 w-25">+ Tambah Mahasiswa</a>
+        <a href="{{ url_for('admin_model') }}" class="btn btn-warning mb-2 w-25">Retrain Model</a>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ctx = document.getElementById('absensiChart').getContext('2d');
-    const absensiChart = new Chart(ctx, {
+    const labels = {{ chart_labels|tojson }};
+    new Chart(document.getElementById('grafikHadir').getContext('2d'), {
         type: 'bar',
         data: {
-            labels: {{ chart_labels|tojson }},
+            labels: labels,
             datasets: [{
-                label: 'Jumlah Absensi',
-                data: {{ chart_data|tojson }},
-                backgroundColor: 'rgba(54, 162, 235, 0.7)',
-                borderColor: 'rgba(54, 162, 235, 1)',
+                label: 'Hadir',
+                data: {{ chart_data_hadir|tojson }},
+                backgroundColor: 'rgba(0,180,216,0.7)',
+                borderColor: 'rgba(0,180,216,1)',
                 borderWidth: 1
             }]
         },
-        options: {
-            scales: {
-                y: { beginAtZero: true, precision:0 }
-            }
-        }
+        options: {scales: {y: {beginAtZero: true, precision:0}}}
+    });
+    new Chart(document.getElementById('grafikSakit').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Sakit',
+                data: {{ chart_data_sakit|tojson }},
+                backgroundColor: 'rgba(255,206,86,0.7)',
+                borderColor: 'rgba(255,206,86,1)',
+                borderWidth: 1
+            }]
+        },
+        options: {scales: {y: {beginAtZero: true, precision:0}}}
+    });
+    new Chart(document.getElementById('grafikAlfa').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Tidak Hadir',
+                data: {{ chart_data_alfa|tojson }},
+                backgroundColor: 'rgba(255,99,132,0.7)',
+                borderColor: 'rgba(255,99,132,1)',
+                borderWidth: 1
+            }]
+        },
+        options: {scales: {y: {beginAtZero: true, precision:0}}}
     });
 </script>
 {% endblock %}

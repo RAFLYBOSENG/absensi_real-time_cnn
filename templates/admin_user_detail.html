@@ -1,13 +1,15 @@
 {% extends 'admin_base.html' %}
 {% block title %}Detail Mahasiswa{% endblock %}
 {% block content %}
-<h2>Detail Mahasiswa</h2>
-<table class="table table-bordered w-50">
-    <tr><th>Nama</th><td>{{ user['nama'] }}</td></tr>
-    <tr><th>NIM</th><td>{{ user['nim'] }}</td></tr>
-    <tr><th>Prodi</th><td>{{ user['prodi'] }}</td></tr>
-    <tr><th>Semester</th><td>{{ user['semester'] }}</td></tr>
-    <tr><th>Universitas</th><td>{{ user['universitas'] }}</td></tr>
-</table>
-<a href="{{ url_for('admin_users') }}" class="btn btn-secondary">Kembali</a>
+<div class="admin-card mb-4" style="max-width:500px;">
+    <div class="admin-card-title mb-2">Detail Mahasiswa</div>
+    <table class="table admin-table">
+        <tr><th>Nama</th><td>{{ user['nama'] }}</td></tr>
+        <tr><th>NIM</th><td>{{ user['nim'] }}</td></tr>
+        <tr><th>Prodi</th><td>{{ user['prodi'] }}</td></tr>
+        <tr><th>Semester</th><td>{{ user['semester'] }}</td></tr>
+        <tr><th>Universitas</th><td>{{ user['universitas'] }}</td></tr>
+    </table>
+    <a href="{{ url_for('admin_users') }}" class="btn btn-secondary">Kembali</a>
+</div>
 {% endblock %} 

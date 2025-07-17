@@ -1,82 +1,229 @@
 <!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Universitas Bale Bandung (UNIBBA)</title>
-    <link href="https://fonts.googleapis.com/css?family=Nunito:900,700,400" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="static/css/landing-custom.css" rel="stylesheet" />
-</head>
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-transparent shadow-none" id="mainNav">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="#">Universitas Bale Bandung</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <header class="hero-section d-flex align-items-center justify-content-center">
-        <div class="hero-overlay"></div>
-        <div class="container text-center hero-content">
-            <h1 class="display-1 fw-bold text-white mb-3 hero-title">UNIVERSITAS BALE BANDUNG</h1>
-            <p class="lead text-white-50 mb-4 hero-subtitle">Salah satu perguruan tinggi di Kabupaten Bandung.</p>
-            <a href="#about" class="btn btn-lg btn-primary px-5 py-3">GET STARTED</a>
-        </div>
-    </header>
-
-    <!-- Section lain bisa ditambah di bawah sini -->
-    <!-- About Section -->
-    <section id="about" class="about-section py-5" style="background: linear-gradient(135deg, #64a19d 0%, #b2f0e6 100%);">
-        <div class="container">
-            <div class="row align-items-center justify-content-center">
-                <div class="col-lg-6 mb-4 mb-lg-0">
-                    <img src="static/assets/img/lab kom hadi.jpg" alt="Lab Komputer UNIBBA" class="img-fluid rounded shadow" style="max-height:340px;object-fit:cover;">
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>ABSENSI | UNIBBA</title>
+        <link rel="icon" type="image/x-icon" href="static/assets/favicon.ico" />
+        <!-- Preload hero background image for faster rendering -->
+        <link rel="preload" as="image" href="static/assets/img/bg-masthead.jpg">
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous" defer></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Varela+Round&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap) minified version recommended -->
+        <link href="static/css/styles_landing.css" rel="stylesheet" />
+        <!-- Inline critical CSS for hero section -->
+        <style>
+        .masthead {
+            background-image: url('static/assets/img/bg-masthead.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            position: relative;
+        }
+        .masthead:before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            /* Kurangi opacity warna hijau agar background lebih jelas */
+            background: linear-gradient(120deg, rgba(100,161,157,0.50) 0%, rgba(72,202,228,0.22) 100%);
+            z-index: 1;
+        }
+        .masthead .container {
+            position: relative;
+            z-index: 2;
+        }
+        .masthead h1, .masthead h2 {
+            text-shadow: 0 4px 24px rgba(0,0,0,0.18);
+        }
+        .masthead .btn-primary {
+            box-shadow: 0 4px 24px rgba(100,161,157,0.18);
+            font-weight: 700;
+            letter-spacing: 0.04em;
+        }
+        </style>
+    </head>
+    <body id="page-top">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+            <div class="container px-4 px-lg-5">
+                <a class="navbar-brand" href="{{ url_for('landing') }}">Universitas Bale Bandung</a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    Menu
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#projects">Contact</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Login</a></li>
+                    </ul>
                 </div>
-                <div class="col-lg-6 text-white">
-                    <h2 class="fw-bold mb-3">Tentang Absensi Lab Komputer UNIBBA</h2>
-                    <p class="lead mb-4">
-                        Sistem Absensi Lab Komputer Universitas Bale Bandung (UNIBBA) adalah aplikasi modern yang memanfaatkan <b>teknologi pengenalan wajah</b> untuk memudahkan proses presensi mahasiswa dan dosen di laboratorium komputer. Dengan sistem ini, kehadiran dapat dicatat secara otomatis, cepat, dan akurat tanpa tanda tangan manual.
-                    </p>
-                    <div class="row text-center">
-                        <div class="col-4">
-                            <div class="bg-white bg-opacity-25 rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width:60px;height:60px;">
-                                <i class="fas fa-user-check fa-2x"></i>
-                            </div>
-                            <div class="fw-bold">Wajah Otomatis</div>
-                        </div>
-                        <div class="col-4">
-                            <div class="bg-white bg-opacity-25 rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width:60px;height:60px;">
-                                <i class="fas fa-chart-line fa-2x"></i>
-                            </div>
-                            <div class="fw-bold">Rekap Real-Time</div>
-                        </div>
-                        <div class="col-4">
-                            <div class="bg-white bg-opacity-25 rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width:60px;height:60px;">
-                                <i class="fas fa-shield-alt fa-2x"></i>
-                            </div>
-                            <div class="fw-bold">Keamanan Data</div>
+            </div>
+        </nav>
+        <!-- Masthead-->
+        <header class="masthead">
+            <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
+                <div class="d-flex justify-content-center">
+                    <div class="text-center">
+                        <h1 class="mx-auto my-0 text-uppercase">UNIVERSITAS BALE BANDUNG</h1>
+                        <h2 class="text-white-50 mx-auto mt-2 mb-5">Absensi Mahasiswa UNIBBA</h2>
+                        <a class="btn btn-primary" href="{{ url_for('login') }}">Get Started</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- About-->
+        <section class="about-section text-center" id="about">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-lg-8">
+                        <h2 class="text-white mb-4">Universitas Bale Bandung (UNIBBA)</h2>
+                        <p class="text-white-50">
+                            didirikan atas dasar Surat Ijin Penyelenggaraan Menteri Pendidikan Nasional Republik Indonesia Nomor 80/D/0/2008 tanggal 22 Mei 2008 adalah Lembaga Pendidikan Tinggi yang berlokasi di wilayah Kabupaten Bandung tepatnya di Jl. R.A.A Wiranatakusumah No.7 Baleendah.
+                        </p>
+                    </div>
+                </div>
+                <img class="img-fluid" src="static/assets/img/ipad.png" alt="..." loading="lazy" />
+            </div>
+        </section>
+        <!-- Projects-->
+        <section class="projects-section bg-light" id="projects">
+            <div class="container px-4 px-lg-5">
+                <!-- Featured Project Row-->
+                <div class="row gx-0 mb-4 mb-lg-5 align-items-center">
+                    <div class="col-xl-8 col-lg-7"><img class="img-fluid mb-3 mb-lg-0" src="static/assets/img/bg-masthead.jpg" alt="..." loading="lazy" /></div>
+                    <div class="col-xl-4 col-lg-5">
+                        <div class="featured-text text-center text-lg-left">
+                            <p class="text-black-50 mb-0">Universitas Bale Bandung (UNIBBA) merupakan pengembangan dari Sekolah Tinggi Pertanian (STIPER) Bale Bandung (terakreditasi BAN PT) 
+                                yang sekarang menjadi Fakultas Pertanian (Faperta) dan Sekolah Tinggi Keguruan dan Ilmu Pendidikan (STKIP) 
+                                Bale Bandung (terakreditasi BAN PT) yang sekarang menjadi Fakultas Keguruan dan Ilmu Pendidikan (FKIP), 
+                                di bawah binaan Yayasan Pendidikan Bale Bandung (YPBB) yang didirikan oleh Bapak R.H. Lily Sumantri 
+                                (beliau pernah manjadi Bupati Kabupaten Bandung pada tahun 1980).</p>
                         </div>
                     </div>
-                    <p class="mt-4 text-white-50 small">
-                        Data absensi dapat dipantau secara real-time oleh dosen dan admin, serta rekap kehadiran dapat diunduh untuk keperluan administrasi maupun evaluasi. Setiap data wajah dan kehadiran disimpan dengan aman dan hanya dapat diakses oleh pihak yang berwenang.
-                    </p>
+                </div>
+                <!-- Project One Row-->
+                <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
+                    <div class="col-lg-6"><img class="img-fluid" src="static/assets/img/demo-image-01.jpg" alt="..." loading="lazy" /></div>
+                    <div class="col-lg-6">
+                        <div class="bg-black text-center h-100 project">
+                            <div class="d-flex h-100">
+                                <div class="project-text w-100 my-auto text-center text-lg-left">
+                                    <p class="mb-0 text-white-50">Adapun keberadaan Universitas Bale Bandung yang kemudian sering disingkat 
+                                        dengan UNIBBA diawali sejak tahun 1970, tepatnya tanggal 1 Maret 1970 dengan berdirinya Lembaga 
+                                        Pendidikan Tinggi yang dikenal pada waktu itu dengan nama Akademi Perkebunan Bandung (APB) di Bandung 
+                                        sebagai ibukota Propinsi Jawa Barat. Sebagai langkah operasional dari surat keputusan Kopertis Wilayah 
+                                        III Jawa Barat dengan Surat Keputusannya Nomor 091/1980, pada tanggal 26 November 1980, APB yang dibina
+                                         oleh Yayasan Pendidikan Bale Bandung (YPBB) diresmikan.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Project Two Row-->
+                <div class="row gx-0 justify-content-center">
+                    <div class="col-lg-6"><img class="img-fluid" src="static/assets/img/demo-image-02.jpg" alt="..." loading="lazy" /></div>
+                    <div class="col-lg-6 order-lg-first">
+                        <div class="bg-black text-center h-100 project">
+                            <div class="d-flex h-100">
+                                <div class="project-text w-100 my-auto text-center text-lg-right">
+                                    <p class="mb-0 text-white-50">Peresmian tersebut sekaligus merupakan pembukaan masa perkuliahan tahun akademik
+                                         1980/1981, dan penggunaan kampus baru yang terletak di Jalan R.A.A. Wiranatakusumah No.7 
+                                         Baleendah Bandung (Kampus Fakultas Pertanian UNIBBA sekarang). Langkah selanjutnya dari masa 
+                                         perkuliahan tahun akademik 1980/1981, maka pada tahun 1981 APB mendapatkan status terdaftar yang 
+                                         baru dari Kopertis Wilayah III Jawa Barat dengan suratnya Nomor 44/1981 berdasarkan Surat Keputusan 
+                                         Menteri Pendidikan dan Kebudayaan Republik Indonesia Nomor 024/1981.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+        </section>
+        <!-- Signup-->
+        <section class="signup-section" id="signup">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5">
+                    <div class="col-md-10 col-lg-8 mx-auto text-center">
+                        <i class="far fa-paper-plane fa-2x mb-2 text-white"></i>
+                        <h2 class="text-white mb-5">Subscribe to receive updates!</h2>
+                        <form class="form-signup" id="contactForm">
+                            <div class="row input-group-newsletter">
+                                <div class="col"><input class="form-control" id="emailAddress" type="email" placeholder="Enter email address..." aria-label="Enter email address..." required /></div>
+                                <div class="col-auto"><button class="btn btn-primary disabled" id="submitButton" type="submit">Notify Me!</button></div>
+                            </div>
+                            <div class="invalid-feedback mt-2">An email is required.</div>
+                            <div class="invalid-feedback mt-2">Email is not valid.</div>
+                            <div class="d-none" id="submitSuccessMessage">
+                                <div class="text-center mb-3 mt-2 text-white">
+                                    <div class="fw-bolder">Form submission successful!</div>
+                                    To activate this form, sign up at
+                                    <br />
+                                    <a href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+                                </div>
+                            </div>
+                            <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3 mt-2">Error sending message!</div></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Contact-->
+        <section class="contact-section bg-black">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5">
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="card py-4 h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-map-marked-alt text-primary mb-2"></i>
+                                <h4 class="text-uppercase m-0">Address</h4>
+                                <hr class="my-4 mx-auto" />
+                                <div class="small text-black-50">4923 Market Street, Orlando FL</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="card py-4 h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-envelope text-primary mb-2"></i>
+                                <h4 class="text-uppercase m-0">Email</h4>
+                                <hr class="my-4 mx-auto" />
+                                <div class="small text-black-50"><a href="#">hello@yourdomain.com</a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="card py-4 h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-mobile-alt text-primary mb-2"></i>
+                                <h4 class="text-uppercase m-0">Phone</h4>
+                                <hr class="my-4 mx-auto" />
+                                <div class="small text-black-50">+1 (555) 902-8832</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="social d-flex justify-content-center">
+                    <a class="mx-2" href="#"><i class="fab fa-twitter"></i></a>
+                    <a class="mx-2" href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a class="mx-2" href="#"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </section>
+        <!-- Footer-->
+        <footer class="footer bg-black small text-center text-white-50"><div class="container px-4 px-lg-5">Copyright &copy; Your Website 2023</div></footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" defer></script>
+        <!-- Core theme JS-->
+        <script src="static/assets/js/scripts.js" defer></script>
+    </body>
+    <!-- <a href="https://t.me/unibbaadmin_bot" target="_blank" class="chatbot-fab" title="Chat Admin via Telegram">
+        <img src="static/assets/img/chatboticon.png" alt="Chatbot" />
+    </a> -->
 </html>

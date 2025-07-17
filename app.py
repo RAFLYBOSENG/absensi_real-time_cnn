@@ -15,6 +15,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from functools import wraps
 import glob
 from mtcnn import MTCNN
+import calendar
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
@@ -457,7 +458,72 @@ def admin_dashboard():
         last_retrain = datetime.datetime.fromtimestamp(os.path.getmtime('dataset/face_model.h5')).strftime('%Y-%m-%d %H:%M:%S')
     except Exception:
         last_retrain = '-'
-    return render_template('admin_dashboard.html', menu='dashboard', total_mahasiswa=total_mahasiswa, total_absensi=total_absensi, total_foto=total_foto, num_classes=num_classes, last_retrain=last_retrain, chart_labels=chart_labels, chart_data=chart_data)
+
+    # Hitung statistik per hari untuk grafik
+    now = datetime.datetime.now()
+    days_in_month = calendar.monthrange(now.year, now.month)[1]
+    chart_data_hadir = [0]*days_in_month
+    chart_data_sakit = [0]*days_in_month
+    chart_data_alfa = [0]*days_in_month
+    total_sakit = 0
+    total_alfa = 0
+
+    for folder in os.listdir('dataset'):
+        folder_path = os.path.join('dataset', folder)
+        if os.path.isdir(folder_path):
+            meta_file = os.path.join(folder_path, 'meta.json')
+            if os.path.exists(meta_file):
+                with open(meta_file) as f:
+                    meta = json.load(f)
+                    user_id = meta.get('user_id')
+                    if user_id:
+                        conn = get_db_connection()
+                        user = conn.execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone()
+                        if user:
+                            # Ambil data absensi dari database
+                            attendance_rows = conn.execute('''
+                                SELECT timestamp, status
+                                FROM attendance
+                                WHERE user_id = ? AND timestamp >= ? AND timestamp < ?
+                            ''', (
+                                user_id,
+                                datetime.datetime(now.year, now.month, 1),
+                                datetime.datetime(now.year, now.month, days_in_month) + datetime.timedelta(days=1)
+                            )).fetchall()
+                            for row in attendance_rows:
+                                try:
+                                    tgl = datetime.datetime.strptime(row['timestamp'], '%Y-%m-%d %H:%M:%S')
+                                    if 1 <= tgl.day <= days_in_month:
+                                        if row['status'] == 'hadir':
+                                            chart_data_hadir[tgl.day-1] += 1
+                                        elif row['status'] == 'sakit':
+                                            chart_data_sakit[tgl.day-1] += 1
+                                            total_sakit += 1
+                                        elif row['status'] in ('alfa', 'bolos'):
+                                            chart_data_alfa[tgl.day-1] += 1
+                                            total_alfa += 1
+                                except Exception:
+                                    pass
+                        conn.close()
+
+    print('chart_data_hadir:', chart_data_hadir)
+    print('chart_data_alfa:', chart_data_alfa)
+
+    return render_template(
+        'admin_dashboard.html',
+        menu='dashboard',
+        total_mahasiswa=total_mahasiswa,
+        total_absensi=total_absensi,
+        total_foto=total_foto,
+        num_classes=num_classes,
+        last_retrain=last_retrain,
+        chart_labels=[f'Hari {i+1}' for i in range(days_in_month)],
+        chart_data_hadir=chart_data_hadir,
+        chart_data_sakit=chart_data_sakit,
+        chart_data_alfa=chart_data_alfa,
+        total_sakit=total_sakit,
+        total_alfa=total_alfa
+    )
 
 @app.route('/admin/users')
 @login_required('admin')
